@@ -1,0 +1,17 @@
+{
+  "name": "react-test",
+  "version": "0.0.0",
+  "description": "react test project",
+  "main": "index.html",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "riekus van montfort",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}
