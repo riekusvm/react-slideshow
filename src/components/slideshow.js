@@ -1,46 +1,48 @@
 import React from 'react';
 import Slide from './slide';
 import {Link} from 'react-router';
+import Store from '../store';
 
-class Slideshow extends React.Component {
+export default class Slideshow extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {slides: [
-      {id: '1', data: 'this is slide #1'},
-      {id: '2', data: 'this is slide #2'},
-      {id: '3', data: 'this is slide #3'},
-      {id: '4', data: 'this is slide #4'}
-    ],
-    slideId: 0};
+  static propTypes = {
+    slideId: React.PropTypes.number,
+    children: React.PropTypes.element,
+    params: React.PropTypes.object
+  };
+
+  static defaultProps = {
+    slideId: 1
+  };
+
+  componentDidMount = () => {
+    this.props.slideId = this.getSlideId();
+    this.props.size = Store.props.slides.length;
+  };
+
+  getSlideId = () => {
+    return (this.props.params.slideId) ?
+      parseInt(this.props.params.slideId, 10) : this.props.slideId;
   }
 
-  componentDidMount() {
-    this.setState({
-      // route components are rendered with useful information, like URL params
-      slideId: this.props.params.slideId
-    });
+  componentDidUpdate = () => {
+    Store.props.slideId = this.props.slideId = this.getSlideId();
   }
 
-  render() {
-    let slides = this.state.slides.map((slide) => {
-      return (<Link to={'/slide/' + slide.id}><Slide data={slide.data} /></Link>);
+  render = () => {
+    let navigation = Store.props.slides.map((slide) => {
+      return (
+        <Link to={'/slideshow/slide/' + slide.key} key={slide.key}>{slide.key}&nbsp;
+        </Link>
+      );
     });
 
     return (
       <div>
-        <h1>SLIDESHOW {this.state.slideId}</h1>
-        {slides}
-        {this.props.children || ''}
+        <h1>SLIDESHOW {this.getSlideId()}</h1>
+        {navigation}
+        <Slide data={Store.get(this.getSlideId())} />
       </div>
     );
-  }
+  };
 }
-
-Slideshow.propTypes = {
-  slides: React.PropTypes.array,
-  slideId: React.PropTypes.number,
-  params: React.PropTypes.object,
-  children: React.PropTypes.element
-};
-export default Slideshow;

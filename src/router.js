@@ -1,17 +1,17 @@
 import React from 'react';
-import {Router, Route} from 'react-router';
-import App from './components/app';
+import {Router, Route, IndexRoute} from 'react-router';
 import Slideshow from './components/slideshow';
-import Slide from './components/slide';
 import NotFound from './components/notfound';
+import App from './app';
 
-class AppRouter extends React.Component {
+export default class AppRouter extends React.Component {
   render() {
     return (
       <Router>
         <Route path="/" component={App}>
-          <Route path="slides" component={Slideshow}>
-            <Route path="/slide/:slideId" component={Slide} />
+          <IndexRoute component={Slideshow} />
+          <Route path="/slideshow" component={Slideshow}>
+            <Route path="slide/:slideId" component={Slideshow} />
           </Route>
         </Route>
         <Route path="*" component={NotFound} />
@@ -19,5 +19,3 @@ class AppRouter extends React.Component {
     );
   }
 }
-
-export default AppRouter;

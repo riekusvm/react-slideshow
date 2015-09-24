@@ -1,6 +1,6 @@
 import React from 'react';
-import Router from './router';
+import AppRouter from './router';
 
 React.render((
-  <Router />
+  <AppRouter />
 ), document.getElementById('content'));

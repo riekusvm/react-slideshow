@@ -1,15 +1,14 @@
 import React from 'react';
 
-class Slide extends React.Component {
+export default class Slide extends React.Component {
+
+  static propTypes = {
+    data: React.PropTypes.string
+  };
+
   render() {
     return (
       <div>{this.props.data}</div>
     );
   }
 }
-
-Slide.propTypes = {
-  data: React.PropTypes.string
-};
-
-export default Slide;
