@@ -15,6 +15,11 @@ export default class Slideshow extends React.Component {
     slideId: 1
   };
 
+  static contextTypes = {
+    router: React.PropTypes.func,
+    aString: React.PropTypes.string
+  }
+
   componentDidMount = () => {
     this.props.slideId = this.getSlideId();
     this.props.size = Store.props.slides.length;
@@ -41,8 +46,17 @@ export default class Slideshow extends React.Component {
       <div>
         <h1>SLIDESHOW {this.getSlideId()}</h1>
         {navigation}
-        <Slide data={Store.get(this.getSlideId())} />
+        <div onClick={this.createSlide}>add one</div>
+        <Slide data={Store.get(this.getSlideId())} key={this.getSlideId()} />
       </div>
     );
+  };
+
+  createSlide = () => {
+    let newSlide = Store.addSlide();
+    // console.log(this.context.router);
+    console.log(newSlide.key + ': ' + newSlide.data);
+    // XXX: for now, we don't have the correct instance of the router passed down..
+    // this.context.router.transitionTo('/slideshow/slide/' + newSlide.key);
   };
 }
