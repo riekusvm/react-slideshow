@@ -27,9 +27,13 @@ let customOpts = {
   debug: true
 };
 
+let babelifyConfig = {
+  optional: ['es7.classProperties']
+};
+
 function browserifyIt(folder) {
   browserify(config.srcDir + '/' + config.mainJsFile)
-    .transform(babelify)
+    .transform(babelify.configure(babelifyConfig))
     .bundle()
     .pipe(source(config.mainJsFile))
     .pipe(buffer())
@@ -96,7 +100,7 @@ let b = watchify(browserify(opts))
 .on('log', gutil.log);
 
 // add transformations here
-b.transform(babelify);
+b.transform(babelify.configure(babelifyConfig));
 
 function bundle() {
   return b.bundle()
