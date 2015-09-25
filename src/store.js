@@ -1,4 +1,4 @@
-const LS_KEY = '__SLIDESHOW_DATA__';
+const LS_KEY = '__SLIDESHOW__DATA__';
 
 export default class Store {
 
@@ -21,7 +21,7 @@ export default class Store {
         let stringData = localStorage.getItem(LS_KEY);
         this.data = JSON.parse(stringData);
       } else {
-        this.saveLocalStorage();
+        this.saveLocalStorage(true);
       }
       setInterval(this.saveLocalStorage.bind(this), 2000);
     } else {
@@ -29,11 +29,13 @@ export default class Store {
     }
   }
 
-  static saveLocalStorage() {
-    if (JSON.stringify(this.data) === localStorage.getItem(LS_KEY)) {
+  static saveLocalStorage(force) {
+    if (JSON.stringify(this.data) === localStorage.getItem(LS_KEY) && force !== true) {
       return;
     }
-    localStorage.setItem(LS_KEY, JSON.stringify(this.data));
+    if (localStorage.getItem(LS_KEY) || force) {
+      localStorage.setItem(LS_KEY, JSON.stringify(this.data));
+    }
   }
 
   static getData() {
@@ -49,7 +51,8 @@ export default class Store {
   }
 
   static addSlide() {
-    this.getData().slides.push({key: this.getData().slides.length + 1, data: '[new slide]'});
+    this.getData().slides.push({key: this.getData().slides.length + 1,
+      data: '[ new slide #' + (this.getSize() + 1) + ' ]'});
     return this.getData().slides[this.getData().slides.length - 1];
   }
 
