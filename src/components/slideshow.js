@@ -25,7 +25,7 @@ export default class Slideshow extends React.Component {
   constructor(props) {
     super(props);
     // default state
-    this.state = {isEditMode: false};
+    this.state = {isEditMode: false, fullscreen: false};
   }
 
   getSlideId = () => {
@@ -45,6 +45,10 @@ export default class Slideshow extends React.Component {
   render = () => {
     // XXX: not sure whether this is a good practice..
     this.updateState();
+
+    window.document.title = constants.APP_TITLE + ' (' + this.getSlideId() + ' / '
+    + Store.getSize() + ')';
+
     let currentSlide = Store.get(this.getSlideId());
 
     if (this.state.isEditMode === false) {
@@ -67,9 +71,9 @@ export default class Slideshow extends React.Component {
 
     return (
       <div>
-        <h1>SLIDESHOW {this.getSlideId()}</h1>
-        <Link to={'/slideshow/slide/' + (Store.getSize() + 1)} onClick={this.addSlide}
+        <Link to={baseUrl + '/slide/' + (Store.getSize() + 1)} onClick={this.addSlide}
           ref="addButton">Add</Link>
+        <Link onClick={this.toggleFullscreen} ref="fsButton">Full screen</Link>
         {editButton}
         {slide}
         <Link to={baseUrl + '/slide/' + (this.getSlideId() - 1)}
@@ -95,12 +99,43 @@ export default class Slideshow extends React.Component {
     case constants.KEY_E:
       React.findDOMNode(this.refs.editButton).click();
       break;
+    case constants.KEY_F:
+      React.findDOMNode(this.refs.fsButton).click();
+      break;
     case constants.KEY_PLUS_1:
     case constants.KEY_PLUS_2:
       React.findDOMNode(this.refs.addButton).click();
       break;
     default:
       break;
+    }
+  }
+
+  toggleFullscreen = () => {
+    if (this.state.fullscreen === false) {
+      let el = document.body;
+
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else if (el.mozRequestFullScreen) {
+        el.mozRequestFullScreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      }
+      this.state.fullscreen = true;
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozExitFullscreen) {
+        document.mozExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      this.state.fullscreen = false;
     }
   }
 
