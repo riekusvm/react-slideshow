@@ -6,7 +6,7 @@ export default class Slide extends React.Component {
     data: React.PropTypes.string
   };
 
-  render() {
+  render = () => {
     return (
       <div>{this.props.data}</div>
     );

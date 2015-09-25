@@ -21,4 +21,16 @@ export default class Store extends React.Component {
     this.props.slides.push({key: this.props.slides.length + 1, data: '[new slide]'});
     return this.props.slides[this.props.slides.length - 1];
   }
+
+  static saveSlide(key, value) {
+    this.props.slides[key - 1] = {key: key, data: value};
+  }
+
+  static deleteSlide(key) {
+    this.props.slides.splice(key - 1, 1);
+  }
+
+  static getSize() {
+    return this.props.slides.length;
+  }
 }

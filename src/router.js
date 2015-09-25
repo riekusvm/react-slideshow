@@ -4,14 +4,17 @@ import Slideshow from './components/slideshow';
 import NotFound from './components/notfound';
 
 export default class AppRouter extends React.Component {
-  render() {
+  render = () => {
     return (
       <Router>
         <Route path="/">
-          <IndexRoute component={Slideshow} />
           <Route path="/slideshow" component={Slideshow}>
             <Route path="slide/:slideId" component={Slideshow} />
           </Route>
+          <Route path="/edit" component={Slideshow}>
+            <Route path="slide/:slideId" component={Slideshow} />
+          </Route>
+            <IndexRoute component={Slideshow} />
         </Route>
         <Route path="*" component={NotFound} />
       </Router>

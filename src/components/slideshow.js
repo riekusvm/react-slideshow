@@ -1,5 +1,6 @@
 import React from 'react';
 import Slide from './slide';
+import SlideEditor from './slideeditor';
 import {Link} from 'react-router';
 import Store from '../store';
 
@@ -20,21 +21,29 @@ export default class Slideshow extends React.Component {
     aString: React.PropTypes.string
   }
 
-  componentDidMount = () => {
-    this.props.slideId = this.getSlideId();
-    this.props.size = Store.props.slides.length;
-  };
+  constructor(props) {
+    super(props);
+    // default state
+    this.state = {isEditMode: false};
+  }
 
   getSlideId = () => {
     return (this.props.params.slideId) ?
       parseInt(this.props.params.slideId, 10) : this.props.slideId;
   }
 
-  componentDidUpdate = () => {
+  updateState = () => {
     Store.props.slideId = this.props.slideId = this.getSlideId();
+    this.state.isEditMode = this.isEditMode();
+  }
+
+  isEditMode = () => {
+    return this.props.location.pathname.indexOf('edit') !== -1;
   }
 
   render = () => {
+    // XXX: not sure whether this is a good practice..
+    this.updateState();
     let navigation = Store.props.slides.map((slide) => {
       return (
         <Link to={'/slideshow/slide/' + slide.key} key={slide.key}>{slide.key}&nbsp;
@@ -42,21 +51,28 @@ export default class Slideshow extends React.Component {
       );
     });
 
+    let slide;
+    let editButton;
+
+    if (this.state.isEditMode !== true) {
+      slide = <Slide data={Store.get(this.getSlideId()).data} key={this.getSlideId()} />;
+      editButton = <Link to={'/edit/slide/' + this.getSlideId()}>edit</Link>;
+    } else {
+      slide = <SlideEditor data={Store.get(this.getSlideId())} key={this.getSlideId()} />;
+    }
+
     return (
       <div>
         <h1>SLIDESHOW {this.getSlideId()}</h1>
         {navigation}
-        <div onClick={this.createSlide}>add one</div>
-        <Slide data={Store.get(this.getSlideId())} key={this.getSlideId()} />
+        <Link to={'/slideshow/slide/' + (Store.getSize() + 1)} onClick={this.addSlide}>Add</Link>
+        {editButton}
+        {slide}
       </div>
     );
   };
 
-  createSlide = () => {
-    let newSlide = Store.addSlide();
-    // console.log(this.context.router);
-    console.log(newSlide.key + ': ' + newSlide.data);
-    // XXX: for now, we don't have the correct instance of the router passed down..
-    // this.context.router.transitionTo('/slideshow/slide/' + newSlide.key);
-  };
+  addSlide = () => {
+    Store.addSlide();
+  }
 }
