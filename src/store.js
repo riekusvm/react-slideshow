@@ -1,36 +1,67 @@
-import React from 'react';
+const LS_KEY = '__SLIDESHOW_DATA__';
 
-export default class Store extends React.Component {
+export default class Store {
 
-  static props = {
+  static storeInitialized = false;
+
+  // TODO: read initial first slide from slide.md
+  static data = {
     slides: [
-      {key: '1', data: 'this is slide #1'},
-      {key: '2', data: 'this is slide #2'},
-      {key: '3', data: 'this is slide #3'},
-      {key: '4', data: 'this is slide #4'}
-    ],
-    slideId: 1,
-    editMode: false
+      {key: '1', data: 'this is slide #1'}
+    ]
   };
 
+/**
+ * intialize the data store
+ * @return {void}
+ */
+  static initializeStore() {
+    if (typeof (Storage) !== 'undefined') {
+      if (localStorage.getItem(LS_KEY) && this.dataLoaded !== true) {
+        let stringData = localStorage.getItem(LS_KEY);
+        this.data = JSON.parse(stringData);
+      } else {
+        this.saveLocalStorage();
+      }
+      setInterval(this.saveLocalStorage.bind(this), 2000);
+    } else {
+      // no localStorage..
+    }
+  }
+
+  static saveLocalStorage() {
+    if (JSON.stringify(this.data) === localStorage.getItem(LS_KEY)) {
+      return;
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(this.data));
+  }
+
+  static getData() {
+    if (this.storeInitialized !== true) {
+      this.initializeStore();
+      this.storeInitialized = true;
+    }
+    return this.data;
+  }
+
   static get(id) {
-    return this.props.slides[id - 1];
+    return this.getData().slides[id - 1];
   }
 
   static addSlide() {
-    this.props.slides.push({key: this.props.slides.length + 1, data: '[new slide]'});
-    return this.props.slides[this.props.slides.length - 1];
+    this.getData().slides.push({key: this.getData().slides.length + 1, data: '[new slide]'});
+    return this.getData().slides[this.getData().slides.length - 1];
   }
 
   static saveSlide(key, value) {
-    this.props.slides[key - 1] = {key: key, data: value};
+    this.getData().slides[key - 1] = {key: key, data: value};
   }
 
   static deleteSlide(key) {
-    this.props.slides.splice(key - 1, 1);
+    this.getData().slides.splice(key - 1, 1);
   }
 
   static getSize() {
-    return this.props.slides.length;
+    return this.getData().slides.length;
   }
 }

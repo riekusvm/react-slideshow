@@ -34,7 +34,7 @@ export default class Slideshow extends React.Component {
   }
 
   updateState = () => {
-    Store.props.slideId = this.props.slideId = this.getSlideId();
+    this.props.slideId = this.getSlideId();
     this.state.isEditMode = this.isEditMode();
   }
 
@@ -45,6 +45,7 @@ export default class Slideshow extends React.Component {
   render = () => {
     // XXX: not sure whether this is a good practice..
     this.updateState();
+    let currentSlide = Store.get(this.getSlideId());
 
     if (this.state.isEditMode === false) {
       window.onkeydown = this.keyListener;
@@ -52,20 +53,13 @@ export default class Slideshow extends React.Component {
       window.onkeydown = this.keyListenerEdit;
     }
 
-    let navigation = Store.props.slides.map((slide) => {
-      return (
-        <Link to={'/slideshow/slide/' + slide.key} key={slide.key}>{slide.key}&nbsp;
-        </Link>
-      );
-    });
-
     let slide;
     let editButton;
 
     let baseUrl = (this.state.isEditMode) ? '/edit' : '/slideshow';
 
     if (this.state.isEditMode !== true) {
-      slide = <Slide data={Store.get(this.getSlideId()).data} key={this.getSlideId()} />;
+      slide = <Slide data={currentSlide.data} key={this.getSlideId()} />;
       editButton = <Link to={'/edit/slide/' + this.getSlideId()} ref="editButton">edit</Link>;
     } else {
       slide = <SlideEditor data={Store.get(this.getSlideId())} key={this.getSlideId()} />;
@@ -74,14 +68,13 @@ export default class Slideshow extends React.Component {
     return (
       <div>
         <h1>SLIDESHOW {this.getSlideId()}</h1>
-        {navigation}
         <Link to={'/slideshow/slide/' + (Store.getSize() + 1)} onClick={this.addSlide}
           ref="addButton">Add</Link>
         {editButton}
         {slide}
         <Link to={baseUrl + '/slide/' + (this.getSlideId() - 1)}
-          ref="previousButton">previous</Link>;
-        <Link to={baseUrl + '/slide/' + (this.getSlideId() + 1)} ref="nextButton">next</Link>;
+          ref="previousButton">previous</Link>
+        <Link to={baseUrl + '/slide/' + (this.getSlideId() + 1)} ref="nextButton">next</Link>
       </div>
     );
   };

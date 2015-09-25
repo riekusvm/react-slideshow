@@ -20,7 +20,8 @@ export default class SlideEditor extends React.Component {
           <textarea defaultValue={this.props.data.data} onChange={this.handleChange}
           ref="data"></textarea>
         </div>
-      <Link to={'/slideshow/slide/' + this.props.data.key} ref="doneButton">Done</Link>
+      <Link to={'/slideshow/slide/' + this.props.data.key} ref="doneButton"
+        onClick={this.saveData}>Done</Link>
       <Link to={'/slideshow/slide/' + (this.props.data.key - 1)}
       onClick={this.deleteSlide}>Delete</Link>
      </div>
@@ -31,7 +32,7 @@ export default class SlideEditor extends React.Component {
     Store.deleteSlide(this.props.data.key);
   }
 
-  handleChange = () => {
+  saveData = () => {
     let data = React.findDOMNode(this.refs.data).value.trim();
     Store.saveSlide(this.props.data.key, data);
   }
