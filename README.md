@@ -16,3 +16,7 @@ gulp build
 ```sh
 gulp serve
 ```
+
+:) :D :P
+
+Emoji supported 👽 💤 🌇 👿  😇  👮

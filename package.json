@@ -4,18 +4,17 @@
   "repository": "http://git.erikveld.nl/riekus/react-slideshow/",
   "description": "simple slideshow with ReactJS and LocalStorage",
   "main": "index.html",
-  "directories": {
-
-  },
+  "directories": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "riekus van montfort",
   "license": "ISC",
   "dependencies": {
+    "markdown-it": "^4.4.0",
+    "markdown-it-emoji": "^1.1.0",
     "react": "^0.13.3",
-    "react-router": "1.0.0-rc1",
-    "history": "^1.9.0"
+    "react-router": "1.0.0-rc1"
   },
   "devDependencies": {
     "babel": "^5.8.20",

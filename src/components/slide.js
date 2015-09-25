@@ -1,4 +1,6 @@
 import React from 'react';
+import markdown from 'markdown-it';
+import emoji from 'markdown-it-emoji';
 
 export default class Slide extends React.Component {
 
@@ -8,7 +10,14 @@ export default class Slide extends React.Component {
 
   render = () => {
     return (
-      <div>{this.props.data}</div>
+      <div dangerouslySetInnerHTML={this.markUp(this.props.data)} />
     );
+  }
+
+  markUp = (text) => {
+    let md = new markdown();
+    md.use(emoji);
+    let markedUp = md.render(text);
+    return {__html: markedUp};
   }
 }
