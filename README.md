@@ -1,7 +1,7 @@
 A plain and simple slideshow, based on [React](https://facebook.github.io/react) and LocalStorage
 
 ## Requirements
-NodeJS
+- NodeJS
 
 ## Usage
 

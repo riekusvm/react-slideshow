@@ -1,11 +1,10 @@
 import React from 'react';
-import Slide from './slide';
-import SlideEditor from './slideeditor';
-import {Link} from 'react-router';
+import Slides from './slides';
 import Store from '../store';
+import {Link} from 'react-router';
 import * as constants from '../constants';
 
-export default class Slideshow extends React.Component {
+export default class AppContainer extends React.Component {
 
   static propTypes = {
     slideId: React.PropTypes.number,
@@ -17,14 +16,8 @@ export default class Slideshow extends React.Component {
     slideId: 1
   };
 
-  // static contextTypes = {
-  //   router: React.PropTypes.func,
-  //   aString: React.PropTypes.string
-  // }
-
   constructor(props) {
     super(props);
-    // default state
     this.state = {
       isEditMode: false,
       fullscreen: false
@@ -37,7 +30,6 @@ export default class Slideshow extends React.Component {
   }
 
   updateState = () => {
-    this.props.slideId = this.getSlideId();
     this.state.isEditMode = this.isEditMode();
   }
 
@@ -49,9 +41,6 @@ export default class Slideshow extends React.Component {
     // XXX: not sure whether this is a good practice..
     this.updateState();
 
-    window.document.title = constants.APP_TITLE + ' (' + this.getSlideId() + ' / '
-    + Store.getSize() + ')';
-
     let slideId = this.getSlideId();
     let currentSlide = Store.get(slideId);
 
@@ -61,32 +50,19 @@ export default class Slideshow extends React.Component {
       window.onkeydown = this.keyListenerEdit;
     }
 
-    let slide;
-    let editButton;
-
-    let baseUrl = (this.state.isEditMode) ? '/edit' : '/slideshow';
-
-    if (this.state.isEditMode !== true) {
-      slide = <Slide data={currentSlide.data} key={slideId} />;
-      editButton = <Link to={'/edit/slide/' + slideId} ref="editButton">edit</Link>;
-    } else {
-      slide = (<SlideEditor value={currentSlide.data} index={slideId}
-        onDelete={this.deleteSlide} onChange={this.saveSlide} ref="editor" />);
-    }
-
     return (
       <div>
-        <Link to={baseUrl + '/slide/' + (Store.getSize() + 1)} onClick={this.addSlide}
-          ref="addButton">Add</Link>
         <Link onClick={this.toggleFullscreen} ref="fsButton">Full screen</Link>
-        {editButton}
-        {slide}
-        <Link to={baseUrl + '/slide/' + (slideId - 1)}
-          ref="previousButton">previous</Link>
-        <Link to={baseUrl + '/slide/' + (slideId + 1)} ref="nextButton">next</Link>
+        <Slides totalSlides={Store.getSize()} slideId={slideId} slideText={currentSlide.data}
+          addSlide={this.addSlide} saveSlide={this.saveSlide} deleteSlide={this.deleteSlide}
+          isEditMode={this.state.isEditMode} ref="slides" />
       </div>
     );
   };
+
+/**
+ * Store methods
+ */
 
   saveSlide = (data) => {
     Store.saveSlide(this.getSlideId(), data);
@@ -96,31 +72,43 @@ export default class Slideshow extends React.Component {
     Store.deleteSlide(this.getSlideId());
   }
 
+  addSlide = () => {
+    Store.addSlide();
+  }
+
   keyListener = (event) => {
     let code = event.keyCode ? event.keyCode : event.which;
+    let location;
     switch (code) {
     case constants.KEY_LEFT:
       if (this.getSlideId() > 1) {
-        React.findDOMNode(this.refs.previousButton).click();
+        location = '/slideshow/slide/' + (this.getSlideId() - 1);
+        this.props.history.pushState(null, location);
       }
       break;
     case constants.KEY_RIGHT:
       if (this.getSlideId() < Store.getSize()) {
-        React.findDOMNode(this.refs.nextButton).click();
+        location = '/slideshow/slide/' + (this.getSlideId() + 1);
+        this.props.history.pushState(null, location);
       }
       break;
     case constants.KEY_E:
-      React.findDOMNode(this.refs.editButton).click();
+      location = '/edit/slide/' + this.getSlideId();
+      this.props.history.pushState(null, location);
       break;
     case constants.KEY_F:
       React.findDOMNode(this.refs.fsButton).click();
       break;
     case constants.KEY_PLUS_1:
     case constants.KEY_PLUS_2:
-      React.findDOMNode(this.refs.addButton).click();
+      this.addSlide();
+      location = '/slideshow/slide/' + (Store.getSize());
       break;
     default:
       break;
+    }
+    if (location) {
+      this.props.history.pushState(null, location);
     }
   }
 
@@ -150,9 +138,5 @@ export default class Slideshow extends React.Component {
       }
       this.state.fullscreen = false;
     }
-  }
-
-  addSlide = () => {
-    Store.addSlide();
   }
 }

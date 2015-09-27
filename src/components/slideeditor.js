@@ -1,7 +1,5 @@
 import React from 'react';
-import Store from '../store';
 import {Link} from 'react-router';
-import * as constants from '../constants';
 
 export default class SlideEditor extends React.Component {
 

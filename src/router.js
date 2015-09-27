@@ -1,6 +1,6 @@
 import React from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
-import Slideshow from './components/slideshow';
+import AppContainer from './components/appcontainer';
 import NotFound from './components/notfound';
 
 export default class AppRouter extends React.Component {
@@ -8,13 +8,10 @@ export default class AppRouter extends React.Component {
     return (
       <Router>
         <Route path="/">
-          <Route path="/slideshow" component={Slideshow}>
-            <Route path="slide/:slideId" component={Slideshow} />
+          <Route path="/:mode" component={AppContainer}>
+            <Route path="slide/:slideId"/>
           </Route>
-          <Route path="/edit" component={Slideshow}>
-            <Route path="slide/:slideId" component={Slideshow} />
-          </Route>
-            <IndexRoute component={Slideshow} />
+          <IndexRoute component={AppContainer} />
         </Route>
         <Route path="*" component={NotFound} />
       </Router>
