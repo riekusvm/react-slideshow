@@ -9,4 +9,4 @@ export const KEY_F = 70;
 export const KEY_P = 80;
 export const KEY_ESCAPE = 27;
 
-export const APP_TITLE = 'slide';
+export const APP_TITLE = 'slides';

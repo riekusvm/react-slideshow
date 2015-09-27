@@ -2,21 +2,20 @@ A plain and simple slideshow, based on [React](https://facebook.github.io/react)
 
 ## Requirements
 - NodeJS
+- A browser with the [HTML5 localStorage API](http://www.w3.org/TR/webstorage/#the-localstorage-attribute)
 
 ## Usage
 
 ```sh
-npm install
+$ npm install
 ```
 
 ```sh
-gulp build
+$ gulp build
 ```
 
 ```sh
-gulp serve
+$ gulp serve
 ```
 
-:) :D :P
-
-Emoji supported 👽 💤 🌇 👿  😇  👮
+Markdown + Emoji supported 👽 💤 🌇 👿  😇  👮
