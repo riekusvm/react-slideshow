@@ -17,15 +17,18 @@ export default class Slideshow extends React.Component {
     slideId: 1
   };
 
-  static contextTypes = {
-    router: React.PropTypes.func,
-    aString: React.PropTypes.string
-  }
+  // static contextTypes = {
+  //   router: React.PropTypes.func,
+  //   aString: React.PropTypes.string
+  // }
 
   constructor(props) {
     super(props);
     // default state
-    this.state = {isEditMode: false, fullscreen: false};
+    this.state = {
+      isEditMode: false,
+      fullscreen: false
+    };
   }
 
   getSlideId = () => {
@@ -49,7 +52,8 @@ export default class Slideshow extends React.Component {
     window.document.title = constants.APP_TITLE + ' (' + this.getSlideId() + ' / '
     + Store.getSize() + ')';
 
-    let currentSlide = Store.get(this.getSlideId());
+    let slideId = this.getSlideId();
+    let currentSlide = Store.get(slideId);
 
     if (this.state.isEditMode === false) {
       window.onkeydown = this.keyListener;
@@ -63,10 +67,11 @@ export default class Slideshow extends React.Component {
     let baseUrl = (this.state.isEditMode) ? '/edit' : '/slideshow';
 
     if (this.state.isEditMode !== true) {
-      slide = <Slide data={currentSlide.data} key={this.getSlideId()} />;
-      editButton = <Link to={'/edit/slide/' + this.getSlideId()} ref="editButton">edit</Link>;
+      slide = <Slide data={currentSlide.data} key={slideId} />;
+      editButton = <Link to={'/edit/slide/' + slideId} ref="editButton">edit</Link>;
     } else {
-      slide = <SlideEditor data={Store.get(this.getSlideId())} key={this.getSlideId()} />;
+      slide = (<SlideEditor value={currentSlide.data} index={slideId}
+        onDelete={this.deleteSlide} onChange={this.saveSlide} ref="editor" />);
     }
 
     return (
@@ -76,12 +81,20 @@ export default class Slideshow extends React.Component {
         <Link onClick={this.toggleFullscreen} ref="fsButton">Full screen</Link>
         {editButton}
         {slide}
-        <Link to={baseUrl + '/slide/' + (this.getSlideId() - 1)}
+        <Link to={baseUrl + '/slide/' + (slideId - 1)}
           ref="previousButton">previous</Link>
-        <Link to={baseUrl + '/slide/' + (this.getSlideId() + 1)} ref="nextButton">next</Link>
+        <Link to={baseUrl + '/slide/' + (slideId + 1)} ref="nextButton">next</Link>
       </div>
     );
   };
+
+  saveSlide = (data) => {
+    Store.saveSlide(this.getSlideId(), data);
+  }
+
+  deleteSlide = () => {
+    Store.deleteSlide(this.getSlideId());
+  }
 
   keyListener = (event) => {
     let code = event.keyCode ? event.keyCode : event.which;

@@ -6,45 +6,35 @@ import * as constants from '../constants';
 export default class SlideEditor extends React.Component {
 
   static propTypes = {
-    data: React.PropTypes.object
+    value: React.PropTypes.string,
+    index: React.PropTypes.number,
+    onDelete: React.PropTypes.func,
+    onChange: React.PropTypes.func
   };
 
-  componentDidMount = () => {
-    window.onkeydown = this.keyListener;
-  }
+  value = '';
 
   render = () => {
     return (
       <div>
         <div>
-          <textarea defaultValue={this.props.data.data} onChange={this.handleChange}
-          ref="data"></textarea>
+          <textarea defaultValue={this.props.value} ref="data"
+            onChange={this.handleChange}></textarea>
         </div>
-      <Link to={'/slideshow/slide/' + this.props.data.key} ref="doneButton"
-        onClick={this.saveData}>Done</Link>
-      <Link to={'/slideshow/slide/' + (this.props.data.key - 1)}
-      onClick={this.deleteSlide}>Delete</Link>
+      <Link to={'/slideshow/slide/' + this.props.index} ref="doneButton"
+        onClick={this.done}>Done</Link>
+      <Link to={'/slideshow/slide/' + (this.props.index - 1)}
+      onClick={this.props.onDelete}>Delete</Link>
      </div>
     );
   }
 
-  deleteSlide = () => {
-    Store.deleteSlide(this.props.data.key);
+  done = () => {
+    this.props.onChange.apply(this, [this.value]);
   }
 
-  saveData = () => {
-    let data = React.findDOMNode(this.refs.data).value.trim();
-    Store.saveSlide(this.props.data.key, data);
-  }
-
-  keyListener = (event) => {
-    let code = event.keyCode ? event.keyCode : event.which;
-    switch (code) {
-    case constants.KEY_ESCAPE:
-      React.findDOMNode(this.refs.doneButton).click();
-      break;
-    default:
-      break;
-    }
+  handleChange = () => {
+    let val = React.findDOMNode(this.refs.data).value.trim();
+    this.value = val;
   }
 }
