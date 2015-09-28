@@ -12,6 +12,10 @@ export default class SlideEditor extends React.Component {
 
   value = '';
 
+  componentDidMount = () => {
+    this.handleChange();
+  }
+
   render = () => {
     return (
       <div>

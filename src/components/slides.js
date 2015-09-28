@@ -16,8 +16,6 @@ export default class Slides extends React.Component {
     isEditMode: React.PropTypes.bool
   }
 
-  state = {};
-
   render = () => {
     window.document.title = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
     + this.props.totalSlides + ')';
@@ -28,14 +26,22 @@ export default class Slides extends React.Component {
     let baseUrl = (this.props.isEditMode) ? '/edit' : '/slideshow';
     let previousButton;
     let nextButton;
+    let navigation = [];
 
-    if (this.props.slideId > 1) {
-      previousButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId - 1)}
-      ref="previousButton">previous</Link>);
-    }
-    if (this.props.slideId < this.props.totalSlides) {
-      nextButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId + 1)}
-      ref="nextButton">next</Link>);
+    if (this.props.isEditMode !== true) {
+      [...Array(this.props.totalSlides)].map((x, i) => {
+        navigation.push(<Link to={baseUrl + '/slide/' + (i + 1)} key={i + 1}>{i + 1} </Link>);
+      }
+      );
+
+      if (this.props.slideId > 1) {
+        previousButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId - 1)}
+        ref="previousButton">previous</Link>);
+      }
+      if (this.props.slideId < this.props.totalSlides) {
+        nextButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId + 1)}
+        ref="nextButton">next</Link>);
+      }
     }
 
     if (this.props.isEditMode !== true) {
@@ -48,11 +54,11 @@ export default class Slides extends React.Component {
 
     return (
       <div>
-        <Link to={baseUrl + '/slide/' + (this.props.totalSlides + 1)} onClick={this.addSlide}
+        <Link to={baseUrl + '/slide/' + (this.props.totalSlides + 1)} onClick={this.props.addSlide}
           ref="addButton">Add</Link>
         {editButton}
         {slide}
-        {previousButton} {nextButton}
+        {previousButton} {navigation} {nextButton}
       </div>
     );
   }
