@@ -12,7 +12,7 @@ import gutil from 'gulp-util';
 import del from 'del';
 import sequence from 'gulp-sequence';
 
-let config = {
+const config = {
   mainJsFile: 'index.js',
   mainHTMLFile: 'index.html',
   srcDir: './src',
@@ -22,12 +22,12 @@ let config = {
 };
 
 // add custom browserify options here
-let customOpts = {
+const customOpts = {
   entries: [config.srcDir + '/' + config.mainJsFile],
   debug: true
 };
 
-let babelifyConfig = {
+const babelifyConfig = {
   optional: ['es7.classProperties']
 };
 
@@ -94,8 +94,8 @@ Gulp.task('run', () => {
   serve(config.distDir);
 });
 
-let opts = assign({}, watchify.args, customOpts);
-let b = watchify(browserify(opts))
+const opts = assign({}, watchify.args, customOpts);
+const b = watchify(browserify(opts))
 .on('update', bundle)
 .on('log', gutil.log);
 

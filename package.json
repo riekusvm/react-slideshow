@@ -14,6 +14,7 @@
     "markdown-it": "^4.4.0",
     "markdown-it-emoji": "^1.1.0",
     "react": "^0.13.3",
+    "react-document-meta": "2.0.0-rc2",
     "react-router": "1.0.0-rc1"
   },
   "devDependencies": {

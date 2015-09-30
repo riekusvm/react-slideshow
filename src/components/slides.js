@@ -1,4 +1,5 @@
 import React from 'react';
+import DocumentMeta from 'react-document-meta';
 import {Link} from 'react-router';
 import Slide from './slide';
 import SlideEditor from './slideeditor';
@@ -6,7 +7,7 @@ import * as constants from '../constants';
 
 export default class Slides extends React.Component {
 
-  propTypes = {
+  static propTypes = {
     slideId: React.PropTypes.number,
     totalSlides: React.PropTypes.number,
     slideText: React.PropTypes.string,
@@ -17,7 +18,7 @@ export default class Slides extends React.Component {
   }
 
   render = () => {
-    window.document.title = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
+    const documentTitle = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
     + this.props.totalSlides + ')';
 
     let slide;
@@ -54,6 +55,7 @@ export default class Slides extends React.Component {
 
     return (
       <div>
+        <DocumentMeta title={documentTitle} />
         <Link to={baseUrl + '/slide/' + (this.props.totalSlides + 1)} onClick={this.props.addSlide}
           ref="addButton">Add</Link>
         {editButton}

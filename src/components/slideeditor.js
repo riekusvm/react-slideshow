@@ -36,7 +36,7 @@ export default class SlideEditor extends React.Component {
   }
 
   handleChange = () => {
-    let val = React.findDOMNode(this.refs.data).value.trim();
+    const val = React.findDOMNode(this.refs.data).value.trim();
     this.value = val;
   }
 }

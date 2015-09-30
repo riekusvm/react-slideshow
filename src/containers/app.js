@@ -1,5 +1,5 @@
 import React from 'react';
-import Slides from './slides';
+import Slides from '../components/slides';
 import Store from '../store';
 import {Link} from 'react-router';
 import * as constants from '../constants';
@@ -41,8 +41,8 @@ export default class AppContainer extends React.Component {
     // XXX: not sure whether this is a good practice..
     this.updateState();
 
-    let slideId = this.getSlideId();
-    let currentSlide = Store.get(slideId);
+    const slideId = this.getSlideId();
+    const currentSlide = Store.get(slideId);
 
     if (this.state.isEditMode === false) {
       window.onkeydown = this.keyListener;
@@ -77,7 +77,7 @@ export default class AppContainer extends React.Component {
   }
 
   keyListener = (event) => {
-    let code = event.keyCode ? event.keyCode : event.which;
+    const code = event.keyCode ? event.keyCode : event.which;
     let location;
     switch (code) {
     case constants.KEY_LEFT:
@@ -114,7 +114,7 @@ export default class AppContainer extends React.Component {
 
   toggleFullscreen = () => {
     if (this.state.fullscreen === false) {
-      let el = document.body;
+      const el = document.body;
 
       if (el.requestFullscreen) {
         el.requestFullscreen();

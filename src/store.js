@@ -18,7 +18,7 @@ export default class Store {
   static initializeStore() {
     if (typeof (Storage) !== 'undefined') {
       if (localStorage.getItem(LS_KEY) && this.dataLoaded !== true) {
-        let stringData = localStorage.getItem(LS_KEY);
+        const stringData = localStorage.getItem(LS_KEY);
         this.data = JSON.parse(stringData);
       } else {
         this.saveLocalStorage(true);

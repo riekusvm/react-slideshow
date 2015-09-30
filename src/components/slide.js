@@ -10,14 +10,16 @@ export default class Slide extends React.Component {
 
   render = () => {
     return (
-      <div dangerouslySetInnerHTML={this.markUp(this.props.data)} />
+      <div>AAAA
+        <div dangerouslySetInnerHTML={this.markUp(this.props.data)} />
+      </div>
     );
   }
 
   markUp = (text) => {
-    let md = new Markdown();
+    const md = new Markdown();
     md.use(emoji);
-    let markedUp = md.render(text);
+    const markedUp = md.render(text);
     return {__html: markedUp};
   }
 }
