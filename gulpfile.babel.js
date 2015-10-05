@@ -11,6 +11,7 @@ import assign from 'lodash.assign';
 import gutil from 'gulp-util';
 import del from 'del';
 import sequence from 'gulp-sequence';
+import CSSModulesify from 'css-modulesify';
 
 const config = {
   mainJsFile: 'index.js',
@@ -18,7 +19,8 @@ const config = {
   srcDir: './src',
   devDir: './dev',
   distDir: './build',
-  distFile: 'app.min.js'
+  distFile: 'js/app.min.js',
+  dataFile: 'store/default.txt'
 };
 
 // add custom browserify options here
@@ -32,15 +34,18 @@ const babelifyConfig = {
 };
 
 function browserifyIt(folder) {
-  browserify(config.srcDir + '/' + config.mainJsFile)
+  const cssStyle = (folder === config.distDir) ? CSSModulesify.generateShortName : '';
+  return browserify(config.srcDir + '/' + config.mainJsFile)
     .transform(babelify.configure(babelifyConfig))
+    .plugin(CSSModulesify, {output: folder + '/app.css', generateScopedName: cssStyle})
     .bundle()
     .pipe(source(config.mainJsFile))
     .pipe(buffer())
     .pipe(rename(config.distFile))
     .pipe(uglify())
-    .pipe(Gulp.dest(folder + '/scripts'));
+    .pipe(Gulp.dest(folder));
 }
+
 
 Gulp.task('browserifyDev', () => {
   browserifyIt(config.devDir);
@@ -65,7 +70,7 @@ Gulp.task('buildclean', () => {
 });
 
 function html(htmlFile, dest) {
-  return Gulp.src(htmlFile)
+  return Gulp.src(config.srcDir + '/' + htmlFile)
   .pipe(Gulp.dest(dest));
 }
 
@@ -76,6 +81,23 @@ Gulp.task('buildhtml', () => {
 Gulp.task('devhtml', () => {
   return html(config.mainHTMLFile, config.devDir);
 });
+
+function fonts(dest) {
+  Gulp.src('./node_modules/font-awesome/css/font-awesome.min.css')
+  .pipe(Gulp.dest(dest + '/css/'));
+
+  Gulp.src('./node_modules/font-awesome/fonts/*')
+  .pipe(Gulp.dest(dest + '/fonts/'));
+}
+
+Gulp.task('devfonts', () => {
+  return fonts(config.devDir);
+});
+
+Gulp.task('buildfonts', () => {
+  return fonts(config.distDir);
+});
+
 
 function serve(dest) {
   Gulp.src(dest)
@@ -101,14 +123,16 @@ const b = watchify(browserify(opts))
 
 // add transformations here
 b.transform(babelify.configure(babelifyConfig));
+b.plugin(CSSModulesify, {output: config.devDir + '/app.css'});
 
 function bundle() {
   return b.bundle()
   .pipe(source(config.distFile))
   .pipe(buffer())
-  .pipe(Gulp.dest(config.devDir + '/scripts'));
+  .pipe(Gulp.dest(config.devDir));
 }
 
-Gulp.task('build', sequence('buildclean', ['browserify', 'buildhtml']));
+Gulp.task('build', sequence('buildclean', ['buildfonts', 'browserify', 'buildhtml']));
 Gulp.task('js', bundle);
-Gulp.task('dev', sequence('devclean', 'browserifyDev', ['js', 'devhtml'], 'devserve'));
+Gulp.task('dev', sequence('devclean', ['devfonts', 'browserifyDev'],
+                          ['js', 'devhtml'], 'devserve'));

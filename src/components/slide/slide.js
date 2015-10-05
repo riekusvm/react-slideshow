@@ -1,6 +1,7 @@
 import React from 'react';
 import Markdown from 'markdown-it';
 import emoji from 'markdown-it-emoji';
+import css from './slide.css';
 
 export default class Slide extends React.Component {
 
@@ -10,7 +11,7 @@ export default class Slide extends React.Component {
 
   render = () => {
     return (
-      <div>AAAA
+      <div className={css.slide}>
         <div dangerouslySetInnerHTML={this.markUp(this.props.data)} />
       </div>
     );

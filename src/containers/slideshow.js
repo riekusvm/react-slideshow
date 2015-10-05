@@ -1,10 +1,11 @@
 import React from 'react';
-import Slides from '../components/slides';
-import Store from '../store';
+import Slides from '../components/slides/slides';
+import Store from '../store/store';
 import {Link} from 'react-router';
 import * as constants from '../constants';
+import css from './slideshow.css';
 
-export default class AppContainer extends React.Component {
+export default class Slideshow extends React.Component {
 
   static propTypes = {
     slideId: React.PropTypes.number,
@@ -52,7 +53,9 @@ export default class AppContainer extends React.Component {
 
     return (
       <div>
-        <Link onClick={this.toggleFullscreen} ref="fsButton">Full screen</Link>
+        <Link onClick={this.toggleFullscreen} ref="fsButton"
+          className={css.fullscreen + ' fa fa-arrows-alt'}
+         title="full screen (F)"/>
         <Slides totalSlides={Store.getSize()} slideId={slideId} slideText={currentSlide.data}
           addSlide={this.addSlide} saveSlide={this.saveSlide} deleteSlide={this.deleteSlide}
           isEditMode={this.state.isEditMode} ref="slides" />

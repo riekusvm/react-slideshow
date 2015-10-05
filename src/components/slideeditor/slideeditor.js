@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import css from './slideeditor.css';
 
 export default class SlideEditor extends React.Component {
 
@@ -18,15 +19,15 @@ export default class SlideEditor extends React.Component {
 
   render = () => {
     return (
-      <div>
+      <div className={css.slideEditor}>
         <div>
-          <textarea defaultValue={this.props.value} ref="data"
+          <textarea className={css.textArea} defaultValue={this.props.value} ref="data"
             onChange={this.handleChange}></textarea>
         </div>
       <Link to={'/slideshow/slide/' + this.props.index} ref="doneButton"
-        onClick={this.done}>Done</Link>
+        onClick={this.done} className="fa fa-check"/>
       <Link to={'/slideshow/slide/' + (this.props.index - 1)}
-      onClick={this.props.onDelete}>Delete</Link>
+      onClick={this.props.onDelete} className="fa fa-trash"/>
      </div>
     );
   }
