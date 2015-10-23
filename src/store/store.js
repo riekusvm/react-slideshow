@@ -1,13 +1,14 @@
-const LS_KEY = '__SLIDESHOW__DATA__';
+import defaultData from './default.js';
+
+const LS_KEY = '__SLIDESHOW__DATA';
 
 export default class Store {
 
   static storeInitialized = false;
 
-  // TODO: read initial first slide from slide.md
   static data = {
     slides: [
-      {key: '1', data: 'this is slide #1'}
+      {key: '1', data: ''}
     ]
   };
 
@@ -16,17 +17,23 @@ export default class Store {
  * @return {void}
  */
   static initializeStore() {
+    console.log('default ', defaultData);
     if (typeof (Storage) !== 'undefined') {
       if (localStorage.getItem(LS_KEY) && this.dataLoaded !== true) {
         const stringData = localStorage.getItem(LS_KEY);
         this.data = JSON.parse(stringData);
       } else {
+        this.readDefaultData();
         this.saveLocalStorage(true);
       }
       setInterval(this.saveLocalStorage.bind(this), 2000);
     } else {
       // no localStorage..
     }
+  }
+
+  static readDefaultData() {
+    this.data.slides[0].data = defaultData;
   }
 
   static saveLocalStorage(force) {
