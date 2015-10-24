@@ -1,5 +1,12 @@
-export default `this is the default text for the initial slides
+export default `# Slideshow
 
-remember: multi-line is supported, as well as markdown and emoji
+**Usage:**
+
+* add slide: +
+* edit slide: E
+* previous / next slide:  arrow left / arrow right
+* toggle full screen: F
+
+Markdown and emoji supported
 
  👽 💤 🌇 👿  😇  👮`;

@@ -18,6 +18,11 @@ export default class SlideEditor extends React.Component {
   }
 
   render = () => {
+    let deleteButton;
+    if (this.props.index > 1) {
+      deleteButton = (<Link to={'/slideshow/slide/' + (this.props.index - 1)}
+      onClick={this.props.onDelete} className="fa fa-trash"/>);
+    }
     return (
       <div className={css.slideEditor}>
         <div>
@@ -26,8 +31,7 @@ export default class SlideEditor extends React.Component {
         </div>
       <Link to={'/slideshow/slide/' + this.props.index} ref="doneButton"
         onClick={this.done} className="fa fa-check"/>
-      <Link to={'/slideshow/slide/' + (this.props.index - 1)}
-      onClick={this.props.onDelete} className="fa fa-trash"/>
+      {deleteButton}
      </div>
     );
   }

@@ -8,6 +8,8 @@ import css from './slides.css';
 
 export default class Slides extends React.Component {
 
+  baseUrl = '';
+
   static propTypes = {
     slideId: React.PropTypes.number,
     totalSlides: React.PropTypes.number,
@@ -19,43 +21,27 @@ export default class Slides extends React.Component {
   }
 
   render = () => {
-    const documentTitle = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
+    this.baseUrl = (this.props.isEditMode) ? '/edit' : '/slideshow';
+
+    let documentTitle = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
     + this.props.totalSlides + ')';
 
     let slide;
     let editButton;
-
-    let baseUrl = (this.props.isEditMode) ? '/edit' : '/slideshow';
     let previousButton;
     let nextButton;
-    let navigation = [];
+    let navigation;
 
     if (this.props.isEditMode !== true) {
-      [...Array(this.props.totalSlides)].map((x, i) => {
-        const style = (i === this.props.slideId - 1) ? 'circle' : 'circle-thin';
-        const active = (i === this.props.slideId - 1) ? css.active : '';
-
-        navigation.push(
-          <Link to={baseUrl + '/slide/' + (i + 1)} key={i + 1}
-            className={css.slidenumber + ' ' + active + ' fa fa-' + style}/>
-        );
-      }
-      );
-
-      if (this.props.slideId > 1) {
-        previousButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId - 1)}
-        ref="previousButton" title="previous (<)" className="fa fa-chevron-left" />);
-      }
-      if (this.props.slideId < this.props.totalSlides) {
-        nextButton = (<Link to={baseUrl + '/slide/' + (this.props.slideId + 1)}
-        ref="nextButton" title="next (>)" className="fa fa-chevron-right" />);
-      }
+      navigation = this.getNavigation();
+      previousButton = this.getPreviousButton();
+      nextButton = this.getNextButton();
     }
 
     if (this.props.isEditMode !== true) {
       slide = <Slide data={this.props.slideText} key={this.props.slideId} />;
       editButton = (<Link to={'/edit/slide/' + this.props.slideId}
-        ref="editButton" title="edit (E)" className="fa fa-edit"/>);
+        ref="editButton" title="edit (E)" className={css.editButton + ' fa fa-edit'} />);
     } else {
       slide = (<SlideEditor value={this.props.slideText} index={this.props.slideId}
         onDelete={this.props.deleteSlide} onChange={this.props.saveSlide} ref="editor" />);
@@ -67,11 +53,47 @@ export default class Slides extends React.Component {
         {slide}
         <div className={css.nav}>
           {previousButton} {navigation} {nextButton}
-          <Link to={baseUrl + '/slide/' + (this.props.totalSlides + 1)}
-            onClick={this.props.addSlide} title="add (+)" ref="addButton" className="fa fa-plus" />
+          <Link to={this.baseUrl + '/slide/' + (this.props.totalSlides + 1)}
+            onClick={this.props.addSlide} title="add (+)" ref="addButton"
+            className={css.addButton + ' fa fa-plus'} />
           {editButton}
         </div>
       </div>
     );
+  }
+
+  getPreviousButton = () => {
+    if (this.props.slideId > 1) {
+      let previousButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId - 1)}
+      ref="previousButton" title="previous (<)"
+      className={css.previousButton + ' fa fa-chevron-left'} />);
+      return previousButton;
+    }
+    return '';
+  }
+
+  getNextButton = () => {
+    if (this.props.slideId < this.props.totalSlides) {
+      let nextButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId + 1)}
+      ref="nextButton" title="next (>)"
+      className={css.nextButton + ' fa fa-chevron-right'} />);
+      return nextButton;
+    }
+    return '';
+  }
+
+  getNavigation = () => {
+    let returnValue = [];
+    [...Array(this.props.totalSlides)].map((x, i) => {
+      let style = (i === this.props.slideId - 1) ? 'circle' : 'circle-thin';
+      let active = (i === this.props.slideId - 1) ? css.active : '';
+
+      returnValue.push(
+        <Link to={this.baseUrl + '/slide/' + (i + 1)} key={i + 1}
+          className={css.slidenumber + ' ' + active + ' fa fa-' + style}/>
+      );
+    }
+    );
+    return returnValue;
   }
 }

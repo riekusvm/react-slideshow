@@ -35,27 +35,21 @@ export default class Slideshow extends React.Component {
   }
 
   isEditMode = () => {
-    return this.props.location.pathname.indexOf('edit') !== -1;
+    return this.props.params.mode === 'edit';
   }
 
   render = () => {
-    // XXX: not sure whether this is a good practice..
     this.updateState();
 
-    const slideId = this.getSlideId();
-    const currentSlide = Store.get(slideId);
+    let slideId = this.getSlideId();
+    let currentSlide = Store.get(slideId);
 
-    if (this.state.isEditMode === false) {
-      window.onkeydown = this.keyListener;
-    } else {
-      window.onkeydown = this.keyListenerEdit;
-    }
+    window.onkeydown = (this.state.isEditMode) ? null : this.keyListener;
 
     return (
       <div>
-        <Link onClick={this.toggleFullscreen} ref="fsButton"
-          className={css.fullscreen + ' fa fa-arrows-alt'}
-         title="full screen (F)"/>
+        <Link to="/fullscreen" onClick={this.toggleFullscreen} ref="fsButton"
+          className={css.fullscreen + ' fa fa-arrows-alt'} title="full screen (F)"/>
         <Slides totalSlides={Store.getSize()} slideId={slideId} slideText={currentSlide.data}
           addSlide={this.addSlide} saveSlide={this.saveSlide} deleteSlide={this.deleteSlide}
           isEditMode={this.state.isEditMode} ref="slides" />
@@ -111,35 +105,45 @@ export default class Slideshow extends React.Component {
       break;
     }
     if (location) {
-      this.props.history.pushState(null, location);
+      this.gotoURL(location);
     }
+  }
+
+  gotoURL = (url) => {
+    this.props.history.pushState(null, url);
   }
 
   toggleFullscreen = () => {
     if (this.state.fullscreen === false) {
-      const el = document.body;
-
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      } else if (el.mozRequestFullScreen) {
-        el.mozRequestFullScreen();
-      } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen();
-      }
-      this.state.fullscreen = true;
+      this.enterFullscreen();
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.mozExitFullscreen) {
-        document.mozExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-      this.state.fullscreen = false;
+      this.exitFullscreen();
+    }
+    this.state.fullscreen = !this.state.fullscreen;
+  }
+
+  enterFullscreen = () => {
+    const el = document.body;
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    }
+  }
+
+  exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozExitFullscreen) {
+      document.mozExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
     }
   }
 }

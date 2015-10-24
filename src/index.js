@@ -3,5 +3,5 @@ import App from './app';
 import AppRouter from './router';
 
 React.render((
-  <App router={AppRouter}/>
+  <App router={AppRouter} />
 ), document.getElementById('content'));

@@ -17,7 +17,6 @@ export default class Store {
  * @return {void}
  */
   static initializeStore() {
-    console.log('default ', defaultData);
     if (typeof (Storage) !== 'undefined') {
       if (localStorage.getItem(LS_KEY) && this.dataLoaded !== true) {
         const stringData = localStorage.getItem(LS_KEY);

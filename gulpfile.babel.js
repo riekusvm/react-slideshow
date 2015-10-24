@@ -19,8 +19,7 @@ const config = {
   srcDir: './src',
   devDir: './dev',
   distDir: './build',
-  distFile: 'js/app.min.js',
-  dataFile: 'store/default.txt'
+  distFile: 'js/app.min.js'
 };
 
 // add custom browserify options here
