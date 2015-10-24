@@ -56,9 +56,9 @@ Gulp.task('browserify', () => {
 });
 
 function clean(folder) {
-  del(folder + '/*').then((paths) => {
-    gutil.log('Deleted files/folders:\n', paths.join('\n'));
-  });
+  // delete synchronously, to assure all old files are gone before building
+  let deleted = del.sync(folder + '/*');
+  gutil.log('Deleted files/folders:\n', deleted.join('\n'));
 }
 
 Gulp.task('devclean', () => {
@@ -134,5 +134,5 @@ function bundle() {
 
 Gulp.task('build', sequence('buildclean', ['buildfonts', 'browserify', 'buildhtml']));
 Gulp.task('js', bundle);
-Gulp.task('dev', sequence('devclean', ['devfonts', 'browserifyDev'],
+Gulp.task('dev', sequence(['devclean'], ['devfonts', 'browserifyDev'],
                           ['js', 'devhtml'], 'devserve'));
