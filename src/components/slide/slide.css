@@ -1,3 +1,12 @@
 .slide{
-  
+
+}
+
+.slide a:link, .slide a:visited{
+  text-decoration: underline;
+  color: #666;
+}
+
+.slide a:hover{
+  text-decoration: none;
 }

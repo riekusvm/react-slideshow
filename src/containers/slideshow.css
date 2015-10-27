@@ -1,13 +1,28 @@
-.slideshow{
+.slideshow {
 
 }
 
-.fullscreen{
+.fullscreen:link, .fullscreen:hover, .fullscreen:visited {
+  color: #666;
+}
+
+.fullscreen {
   position: fixed;
-  top: 100%;
-  right: 2em;
-  height: 2em;
-  margin-top: -2em;
-  color: #000;
   z-index: 1000;
+  top: 100%;
+  right: 1.75em;
+  height: 2em;
+  margin-top: -1.5em;
+}
+
+body:-webkit-full-screen .fullscreen{
+  display: none;
+}
+
+body:-moz-full-screen .fullscreen {
+  display: none;
+}
+
+body:-ms-fullscreen .fullscreen {
+  display: none;
 }

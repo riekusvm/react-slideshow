@@ -1,8 +1,11 @@
-.slides{
-
+.slides {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  padding: 3vh 3vw;
 }
 
-.nav{
+.nav {
   position: fixed;
   top: 100%;
   left: 0;
@@ -10,19 +13,69 @@
   margin-top: -2em;
   padding: 0.25em;
   width: 100%;
-  border-top: 1px solid #DDD;
-  background-color: rgba(200,200,200,0.8);
   text-align: center;
+  background-color: #FFF;
 }
 
-.slidenumber{
+body:-webkit-full-screen .nav {
+  display: none;
+}
+
+body:-moz-full-screen .nav {
+  display: none;
+}
+
+body:-ms-fullscreen .nav {
+  display: none;
+}
+
+.nav a:link, .nav a:hover, .nav a:visited {
+  color: #666;
+}
+
+.slidenumber {
   height: 1em;
   vertical-align: middle;
-  font-size: 50%;
-  margin-right: 1.5em;
+  font-size: 0.25em;
+  margin-right: 2.5em;
   color: #000;
 }
 
-.active{
-  font-size: 75%;
+.active {
+  font-size: 0.25em;
+}
+
+.addButton, .editButton {
+  position: fixed;
+  margin-top: -1.5em;
+  top: 100%;
+}
+
+.addButton {
+  right: 4.5em;
+}
+
+.editButton {
+  right: 3em;
+}
+
+.previousButton, .nextButton, .previousButton:visited, .nextButton:visited {
+  color: #666;
+}
+
+.previousButton, .nextButton {
+  position: fixed;
+  top: 50%;
+  margin-top: -1.5em;
+  width: 1em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+
+.previousButton {
+  left: 0;
+}
+
+.nextButton {
+  right: 0;
 }

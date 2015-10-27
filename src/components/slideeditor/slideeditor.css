@@ -8,3 +8,11 @@
   width: 100%;
   height: 550px;
 }
+
+.doneButton, .doneButton:visited, .deleteButton, .deleteButton:visited  {
+  color: #666;
+}
+
+.doneButton, .deleteButton {
+  margin-right: 0.3em;
+}

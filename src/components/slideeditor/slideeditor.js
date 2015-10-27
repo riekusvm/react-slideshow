@@ -21,7 +21,7 @@ export default class SlideEditor extends React.Component {
     let deleteButton;
     if (this.props.index > 1) {
       deleteButton = (<Link to={'/slideshow/slide/' + (this.props.index - 1)}
-      onClick={this.props.onDelete} className="fa fa-trash"/>);
+      onClick={this.props.onDelete} className={css.deleteButton + ' fa fa-trash'} />);
     }
     return (
       <div className={css.slideEditor}>
@@ -30,7 +30,7 @@ export default class SlideEditor extends React.Component {
             onChange={this.handleChange}></textarea>
         </div>
       <Link to={'/slideshow/slide/' + this.props.index} ref="doneButton"
-        onClick={this.done} className="fa fa-check"/>
+        onClick={this.done} className={css.doneButton + ' fa fa-check'} />
       {deleteButton}
      </div>
     );

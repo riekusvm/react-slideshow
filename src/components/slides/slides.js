@@ -28,6 +28,7 @@ export default class Slides extends React.Component {
 
     let slide;
     let editButton;
+    let addButton;
     let previousButton;
     let nextButton;
     let navigation;
@@ -36,9 +37,7 @@ export default class Slides extends React.Component {
       navigation = this.getNavigation();
       previousButton = this.getPreviousButton();
       nextButton = this.getNextButton();
-    }
-
-    if (this.props.isEditMode !== true) {
+      addButton = this.getAddButton();
       slide = <Slide data={this.props.slideText} key={this.props.slideId} />;
       editButton = (<Link to={'/edit/slide/' + this.props.slideId}
         ref="editButton" title="edit (E)" className={css.editButton + ' fa fa-edit'} />);
@@ -53,12 +52,18 @@ export default class Slides extends React.Component {
         {slide}
         <div className={css.nav}>
           {previousButton} {navigation} {nextButton}
-          <Link to={this.baseUrl + '/slide/' + (this.props.totalSlides + 1)}
-            onClick={this.props.addSlide} title="add (+)" ref="addButton"
-            className={css.addButton + ' fa fa-plus'} />
+          {addButton}
           {editButton}
         </div>
       </div>
+    );
+  }
+
+  getAddButton = () => {
+    return (
+      <Link to={this.baseUrl + '/slide/' + (this.props.totalSlides + 1)}
+        onClick={this.props.addSlide} title="add (+)" ref="addButton"
+        className={css.addButton + ' fa fa-plus'} />
     );
   }
 
