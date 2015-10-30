@@ -43,13 +43,18 @@ export default class Slideshow extends React.Component {
 
     let slideId = this.getSlideId();
     let currentSlide = Store.get(slideId);
+    let fullscreenButton;
+
+    if (!this.state.isEditMode) {
+      fullscreenButton = (<Link to="/fullscreen" onClick={this.toggleFullscreen} ref="fsButton"
+        className={css.fullscreen + ' fa fa-arrows-alt'} title="full screen (F)"/>);
+    }
 
     window.onkeydown = (this.state.isEditMode) ? null : this.keyListener;
 
     return (
       <div>
-        <Link to="/fullscreen" onClick={this.toggleFullscreen} ref="fsButton"
-          className={css.fullscreen + ' fa fa-arrows-alt'} title="full screen (F)"/>
+        {fullscreenButton}
         <Slides totalSlides={Store.getSize()} slideId={slideId} slideText={currentSlide.data}
           addSlide={this.addSlide} saveSlide={this.saveSlide} deleteSlide={this.deleteSlide}
           isEditMode={this.state.isEditMode} ref="slides" />
