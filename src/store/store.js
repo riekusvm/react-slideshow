@@ -1,4 +1,5 @@
 import defaultData from './default.js';
+import {SLIDE_CONTENT} from '../constants';
 
 const LS_KEY = '__SLIDESHOW__DATA';
 
@@ -58,7 +59,7 @@ export default class Store {
 
   static addSlide() {
     this.getData().slides.push({key: this.getData().slides.length + 1,
-      data: '[ new slide #' + (this.getSize() + 1) + ' ]'});
+      data: SLIDE_CONTENT.replace('{0}', (this.getSize() + 1))});
     return this.getData().slides[this.getData().slides.length - 1];
   }
 

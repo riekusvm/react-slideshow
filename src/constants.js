@@ -5,3 +5,4 @@ export const KEY_PLUS_2 = 187;
 export const KEY_E = 69;
 export const KEY_F = 70;
 export const APP_TITLE = 'slides';
+export const SLIDE_CONTENT = '# New slide #{0}';
