@@ -101,7 +101,7 @@ Gulp.task('buildfonts', () => {
 function serve(dest) {
   Gulp.src(dest)
     .pipe(webserver({
-      livereload: true,
+      livereload: dest === config.devDir,
       directoryListing: false,
       open: true
     }));
@@ -109,6 +109,10 @@ function serve(dest) {
 
 Gulp.task('devserve', () => {
   serve(config.devDir);
+});
+
+Gulp.task('run', () => {
+  serve(config.distDir);
 });
 
 Gulp.task('run', () => {

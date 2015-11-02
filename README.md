@@ -15,7 +15,13 @@ $ gulp build
 ```
 
 ```sh
-$ gulp serve
+$ gulp run
+```
+
+for live-reload use
+
+```
+$ gulp dev
 ```
 
 Markdown + Emoji supported 👽 💤 🌇 👿  😇  👮
