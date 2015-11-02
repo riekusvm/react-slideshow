@@ -25,10 +25,8 @@ export default class SlideEditor extends React.Component {
     }
     return (
       <div className={css.slideEditor}>
-        <div>
-          <textarea className={css.textArea} defaultValue={this.props.value} ref="data"
-            onChange={this.handleChange}></textarea>
-        </div>
+      <textarea className={css.textArea} defaultValue={this.props.value} ref="data"
+        onChange={this.handleChange}></textarea>
       <Link to={'/slideshow/slide/' + this.props.index} ref="doneButton"
         onClick={this.done} className={css.doneButton + ' fa fa-check'} />
       {deleteButton}

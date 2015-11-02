@@ -1,18 +1,23 @@
 .slideEditor{
-
+  height: 97vh;
 }
 
 .textArea{
-  padding: 0.5em;
+  position: relative;
+  box-sizing: border-box;
+  padding: 1em;
   font-size: 1em;
   width: 100%;
-  height: 550px;
+  height: 85vh;
 }
 
 .doneButton, .doneButton:visited, .deleteButton, .deleteButton:visited  {
+  position: fixed;
+  bottom: 7vh;
+  left: 3vw;
   color: #666;
 }
 
-.doneButton, .deleteButton {
-  margin-right: 0.3em;
+.deleteButton {
+  margin-left: 2em;
 }
