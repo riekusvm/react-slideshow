@@ -12,6 +12,7 @@ import gutil from 'gulp-util';
 import del from 'del';
 import sequence from 'gulp-sequence';
 import CSSModulesify from 'css-modulesify';
+import minifyCss from 'gulp-minify-css';
 
 const config = {
   mainJsFile: 'index.js',
@@ -45,13 +46,18 @@ function browserifyIt(folder) {
     .pipe(Gulp.dest(folder));
 }
 
+Gulp.task('minify-css', () => {
+  return Gulp.src(config.distDir + '/*.css')
+  .pipe(minifyCss({compatibility: 'ie8'}))
+  .pipe(Gulp.dest(config.distDir));
+});
 
 Gulp.task('browserifyDev', () => {
-  browserifyIt(config.devDir);
+  return browserifyIt(config.devDir);
 });
 
 Gulp.task('browserify', () => {
-  browserifyIt(config.distDir);
+  return browserifyIt(config.distDir);
 });
 
 function clean(folder) {
@@ -61,11 +67,11 @@ function clean(folder) {
 }
 
 Gulp.task('devclean', () => {
-  clean(config.devDir);
+  return clean(config.devDir);
 });
 
 Gulp.task('buildclean', () => {
-  clean(config.distDir);
+  return clean(config.distDir);
 });
 
 function html(htmlFile, dest) {
@@ -135,7 +141,8 @@ function bundle() {
   .pipe(Gulp.dest(config.devDir));
 }
 
-Gulp.task('build', sequence('buildclean', ['buildfonts', 'browserify', 'buildhtml']));
+Gulp.task('build', sequence('buildclean', ['buildfonts', 'browserify'],
+                            ['minify-css', 'buildhtml']));
 Gulp.task('js', bundle);
 Gulp.task('dev', sequence(['devclean'], ['devfonts', 'browserifyDev'],
                           ['js', 'devhtml'], 'devserve'));
