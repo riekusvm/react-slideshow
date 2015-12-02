@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Slides from '../components/slides/slides';
 import Store from '../store/store';
 import {Link} from 'react-router';
@@ -10,11 +11,14 @@ export default class Slideshow extends React.Component {
   static propTypes = {
     slideId: React.PropTypes.number,
     children: React.PropTypes.element,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    store: React.PropTypes.func,
+    history: React.PropTypes.object
   };
 
   static defaultProps = {
-    slideId: 1
+    slideId: 1,
+    store: Store
   };
 
   constructor(props) {
@@ -42,7 +46,7 @@ export default class Slideshow extends React.Component {
     this.updateState();
 
     let slideId = this.getSlideId();
-    let currentSlide = Store.get(slideId);
+    let currentSlide = this.props.store.get(slideId);
     let fullscreenButton;
 
     if (!this.state.isEditMode) {
@@ -55,9 +59,9 @@ export default class Slideshow extends React.Component {
     return (
       <div>
         {fullscreenButton}
-        <Slides totalSlides={Store.getSize()} slideId={slideId} slideText={currentSlide.data}
-          addSlide={this.addSlide} saveSlide={this.saveSlide} deleteSlide={this.deleteSlide}
-          isEditMode={this.state.isEditMode} ref="slides" />
+        <Slides totalSlides={this.props.store.getSize()} slideId={slideId}
+          slideText={currentSlide.data} addSlide={this.addSlide} saveSlide={this.saveSlide}
+          deleteSlide={this.deleteSlide} isEditMode={this.state.isEditMode} ref="slides" />
       </div>
     );
   };
@@ -67,15 +71,15 @@ export default class Slideshow extends React.Component {
  */
 
   saveSlide = (data) => {
-    Store.saveSlide(this.getSlideId(), data);
+    this.props.store.saveSlide(this.getSlideId(), data);
   }
 
   deleteSlide = () => {
-    Store.deleteSlide(this.getSlideId());
+    this.props.store.deleteSlide(this.getSlideId());
   }
 
   addSlide = () => {
-    Store.addSlide();
+    this.props.store.addSlide();
   }
 
   keyListener = (event) => {
@@ -85,26 +89,29 @@ export default class Slideshow extends React.Component {
     case constants.KEY_LEFT:
       if (this.getSlideId() > 1) {
         location = '/slideshow/slide/' + (this.getSlideId() - 1);
-        this.props.history.pushState(null, location);
       }
       break;
     case constants.KEY_RIGHT:
-      if (this.getSlideId() < Store.getSize()) {
+      if (this.getSlideId() < this.props.store.getSize()) {
         location = '/slideshow/slide/' + (this.getSlideId() + 1);
-        this.props.history.pushState(null, location);
       }
       break;
     case constants.KEY_E:
       location = '/edit/slide/' + this.getSlideId();
-      this.props.history.pushState(null, location);
       break;
     case constants.KEY_F:
-      React.findDOMNode(this.refs.fsButton).click();
+      if (this.state.fullscreen === false) {
+        location = '/fullscreen/slide/' + this.getSlideId();
+      } else {
+        location = '/slideshow/slide/' + this.getSlideId();
+      }
+      ReactDOM.findDOMNode(this.refs.fsButton).click();
+      this.state.fullscreen = !this.state.fullscreen;
       break;
     case constants.KEY_PLUS_1:
     case constants.KEY_PLUS_2:
       this.addSlide();
-      location = '/slideshow/slide/' + (Store.getSize());
+      location = '/slideshow/slide/' + (this.props.store.getSize());
       break;
     default:
       break;
@@ -124,7 +131,6 @@ export default class Slideshow extends React.Component {
     } else {
       this.exitFullscreen();
     }
-    this.state.fullscreen = !this.state.fullscreen;
   }
 
   enterFullscreen = () => {

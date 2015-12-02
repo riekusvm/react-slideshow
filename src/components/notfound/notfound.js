@@ -1,14 +1,13 @@
 import React from 'react';
 import css from './notfound.css';
+import {TEXT_404} from '../../constants';
 
-class NotFound extends React.Component {
+export default class NotFound extends React.Component {
   render = () => {
     return (
       <div className={css.notfound}>
-        <h1>404 not found</h1>
+        <h1>{TEXT_404}</h1>
       </div>
     );
   }
 }
-
-export default NotFound;

@@ -5,15 +5,13 @@
   "description": "simple slideshow with ReactJS and LocalStorage",
   "main": "index.html",
   "directories": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "riekus van montfort",
   "license": "ISC",
   "dependencies": {
     "markdown-it": "^4.4.0",
     "markdown-it-emoji": "^1.1.0",
-    "react": "^0.13.3",
+    "react": "^0.14.3",
+    "react-dom": "~0.14.0",
     "react-document-meta": "2.0.0-rc2",
     "react-router": "1.0.0-rc1"
   },
@@ -38,11 +36,37 @@
     "gulp-util": "^3.0.6",
     "gulp-webserver": "^0.9.1",
     "install": "^0.1.8",
+    "jest-cli": "*",
     "lodash.assign": "^3.2.0",
     "npm": "^2.14.3",
+    "react-addons-test-utils": "~0.14.0",
     "react-css-modules": "^3.2.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0"
+  },
+  "scripts": {
+    "test": "BABEL_JEST_STAGE=0 jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "./jest-preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-dom",
+      "<rootDir>/node_modules/react-addons-test-utils",
+      "<rootDir>/node_modules/fbjs"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "testFileExtensions": [
+      "es6",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ]
   }
 }

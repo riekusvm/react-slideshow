@@ -24,4 +24,15 @@ for live-reload use
 $ gulp dev
 ```
 
+testing:
+```
+npm test
+```
+
+or:
+
+```
+npm test -- --watch
+```
+
 Markdown + Emoji supported 👽 💤 🌇 👿  😇  👮

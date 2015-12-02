@@ -49,12 +49,12 @@ export default class Slides extends React.Component {
     return (
       <div className={css.slides}>
         <DocumentMeta title={documentTitle} />
-        {slide}
-        <div className={css.nav}>
-          {previousButton} {navigation} {nextButton}
-          {addButton}
-          {editButton}
-        </div>
+          {slide || ''}
+          <div className={css.nav}>
+            {previousButton} {navigation} {nextButton}
+            {addButton}
+            {editButton}
+          </div>
       </div>
     );
   }

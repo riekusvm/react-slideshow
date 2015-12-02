@@ -2,3 +2,4 @@ node_modules/
 build/
 examples/
 dev/
+**/__tests__/*.js
