@@ -20,11 +20,7 @@ describe('Store', () => {
     storeSize = Store.getSize();
     for(let i = storeSize; i <= storeSize + 10; i++) {
       let storeItem = Store.addSlide();
-      expect(storeItem.data).toEqual(getSlideText(i));
+      expect(storeItem.data).toEqual(Store.getDefaultSlideText(i + 1));
     }
   });
 });
-
-function getSlideText(i) {
-  return SLIDE_CONTENT.replace('{0}', (i + 1))
-}

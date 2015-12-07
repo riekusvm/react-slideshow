@@ -59,8 +59,12 @@ export default class Store {
 
   static addSlide() {
     this.getData().slides.push({key: this.getData().slides.length + 1,
-      data: SLIDE_CONTENT.replace('{0}', (this.getSize() + 1))});
+      data: this.getDefaultSlideText(this.getSize() + 1)});
     return this.getData().slides[this.getData().slides.length - 1];
+  }
+
+  static getDefaultSlideText(slideId) {
+    return SLIDE_CONTENT.replace('{0}', (slideId));
   }
 
   static saveSlide(key, value) {
