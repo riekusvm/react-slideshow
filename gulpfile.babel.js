@@ -7,7 +7,6 @@ import rename from 'gulp-rename';
 import buffer from 'vinyl-buffer';
 import source from 'vinyl-source-stream';
 import watchify from 'watchify';
-import assign from 'lodash.assign';
 import gutil from 'gulp-util';
 import del from 'del';
 import sequence from 'gulp-sequence';
@@ -125,7 +124,7 @@ Gulp.task('run', () => {
   serve(config.distDir);
 });
 
-const opts = assign({}, watchify.args, customOpts);
+const opts = Object.assign({}, watchify.args, customOpts);
 const b = watchify(browserify(opts))
 .on('update', bundle)
 .on('log', gutil.log);

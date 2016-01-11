@@ -6,7 +6,6 @@ export default class App extends React.Component {
     return (
       <div className={css.app}>
           <this.props.router />
-          {this.props.children || '' }
       </div>
     );
   }

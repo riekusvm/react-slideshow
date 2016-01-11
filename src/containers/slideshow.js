@@ -45,8 +45,8 @@ export default class Slideshow extends React.Component {
   render = () => {
     this.updateState();
 
-    let slideId = this.getSlideId();
-    let currentSlide = this.props.store.get(slideId);
+    const slideId = this.getSlideId();
+    const currentSlide = this.props.store.get(slideId);
     let fullscreenButton;
 
     if (!this.state.isEditMode) {

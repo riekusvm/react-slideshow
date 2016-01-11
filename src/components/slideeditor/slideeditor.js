@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 import css from './slideeditor.css';
 
@@ -39,7 +40,7 @@ export default class SlideEditor extends React.Component {
   }
 
   handleChange = () => {
-    const val = React.findDOMNode(this.refs.data).value.trim();
+    const val = ReactDOM.findDOMNode(this.refs.data).value.trim();
     this.value = val;
   }
 }

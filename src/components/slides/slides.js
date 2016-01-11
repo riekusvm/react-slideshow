@@ -23,7 +23,7 @@ export default class Slides extends React.Component {
   render = () => {
     this.baseUrl = (this.props.isEditMode) ? '/edit' : '/slideshow';
 
-    let documentTitle = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
+    const documentTitle = constants.APP_TITLE + ' (' + this.props.slideId + ' / '
     + this.props.totalSlides + ')';
 
     let slide;
@@ -69,7 +69,7 @@ export default class Slides extends React.Component {
 
   getPreviousButton = () => {
     if (this.props.slideId > 1) {
-      let previousButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId - 1)}
+      const previousButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId - 1)}
       ref="previousButton" title="previous (<)"
       className={css.previousButton + ' fa fa-chevron-left'} />);
       return previousButton;
@@ -79,7 +79,7 @@ export default class Slides extends React.Component {
 
   getNextButton = () => {
     if (this.props.slideId < this.props.totalSlides) {
-      let nextButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId + 1)}
+      const nextButton = (<Link to={this.baseUrl + '/slide/' + (this.props.slideId + 1)}
       ref="nextButton" title="next (>)"
       className={css.nextButton + ' fa fa-chevron-right'} />);
       return nextButton;
@@ -88,17 +88,15 @@ export default class Slides extends React.Component {
   }
 
   getNavigation = () => {
-    let returnValue = [];
-    [...Array(this.props.totalSlides)].map((x, i) => {
-      let style = (i === this.props.slideId - 1) ? 'circle' : 'circle-thin';
-      let active = (i === this.props.slideId - 1) ? css.active : '';
+    return [...Array(this.props.totalSlides)].map((x, i) => {
+      const style = (i === this.props.slideId - 1) ? 'circle' : 'circle-thin';
+      const active = (i === this.props.slideId - 1) ? css.active : '';
 
-      returnValue.push(
+      return (
         <Link to={this.baseUrl + '/slide/' + (i + 1)} key={i + 1}
           className={css.slidenumber + ' ' + active + ' fa fa-' + style}/>
       );
     }
     );
-    return returnValue;
   }
 }
